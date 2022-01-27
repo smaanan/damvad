@@ -1,8 +1,9 @@
 library(ggplot2)
+library(ggallin)
 library(sf)
 library(giscoR)
 
-data <- read.csv("~/Downloads/full202052 (1)/full202052.dat")
+data <- read.csv("~/Downloads/full202052/full202052.dat")
 
 data2 = data[data$TRADE_TYPE=="E",]
 
@@ -10,8 +11,7 @@ x = aggregate(VALUE_IN_EUROS ~ FLOW + PARTNER_ISO, data2, sum)
 
 x = sapply(split(x, x$PARTNER_ISO), function(x) diff(x$VALUE_IN_EUROS))
 
-x  = data.frame(Code = names(unlist(x)), Value = unlist(x))
-
+x = data.frame(Code = names(unlist(x)), Value = unlist(x))
 
 eu = levels(as.factor(data$DECLARANT_ISO))
 
@@ -19,17 +19,21 @@ eu = gisco_get_countries(epsg = "4326", year = "2020", resolution = "3", country
 
 borders <- gisco_get_countries(epsg = "4326", year = "2020", resolution = "3", country = x$Code)
 
+borders[borders$CNTR_ID=="MA",]$geometry = st_combine(borders[borders$CNTR_ID%in%c("MA","EH"),])
+
+borders = borders[borders$CNTR_ID!="EH",]
+
 merged <- merge(borders, x, by.x = "CNTR_ID", by.y = "Code", all.x = TRUE)
 
 Africa <- gisco_get_countries(epsg = "4326", year = "2020", resolution = "3", region = "Africa")
 
 ggplot(merged) +
-  #geom_sf(aes(fill = sign(Value/1000000000)*log(abs(Value/1000000000))), color = NA, alpha = 0.9) +
-  geom_sf(aes(fill = Value/1000000000), color = NA, alpha = 0.9) +
+  geom_sf(aes(fill = Value/1000000000), color = NA, alpha = 0.9, size = 0.1) +
   geom_sf(data = eu, fill = "deepskyblue4", color = NA, size = 0.1) +
-  geom_sf(data = Africa, fill = NA, size = 0.1, col = "grey30") +
-  geom_sf(data = borders, fill = NA, size = 0.1, col = "grey30") +
+  #geom_sf(data = Africa, fill = NA, size = 0.1, col = "grey30") +
+  #geom_sf(data = borders, fill = NA, size = 0.1, col = "grey30") +
   scale_fill_gradient2(
+    trans = pseudolog10_trans,
     name = "Euros (Billions)",
     guide = guide_legend(
       direction = "horizontal",
