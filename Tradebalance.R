@@ -2,7 +2,7 @@ library(ggplot2)
 library(sf)
 library(giscoR)
 
-data <- read.csv("~/Downloads/full202052 (1)/full202052.dat")
+data <- read.csv("~/Downloads/full202052/full202052.dat")
 
 x = aggregate(VALUE_IN_EUROS ~ FLOW + DECLARANT_ISO, data = data, sum)
 
