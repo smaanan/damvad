@@ -6,4 +6,8 @@ The first question one analyzing the data set would be interested to answer is h
 
 To answer this question we decided to rely solely on the capabilities of the statistical programming language R, due to its superior capabilities in terms of data wrangling, data analysis, and data visualization.
 
-In order to have a look at the amount of trade balance of the 28 European countries in our data set, we use the following R code:
+The script file `Tradebalance.R` creates the map below, which shows the trade balance for the 28 European countries. 
+
+/home/maanan/DAMVAD/damvad/Tradebalance.png
+
+From the map above, and from the R script, we can see that among the 28 countries, 13 have a positive trade balance, namely, Germany, Ireland, Netherlands, Italy, Belgium, Czech Republic, Poland, Denmark, Sweden, Hungary, Slovenia and Slovakia, with Germany having the largest trade surplus with about 367 billion euros, whereas 15 countries have a negative trade balance, namely France, Romania, Greece, Spain, the United Kingdom, Portugal, Croatia, Luxembourg, Cyprus, Bulgaria, Austria, Malta, Finland, Latvia, Estonia, and Lithuania, with France having the largest trade deficit with 162 billion euros.
